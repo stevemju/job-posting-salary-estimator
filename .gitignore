@@ -1,0 +1,17 @@
+/catboost_info
+data/datasets/
+data/embedding_cache/
+data/models/
+
+.venv/
+venv/
+
+__pycache__/
+*.pyc
+
+.DS_Store
+
+.vscode/
+
+*.log
+*.cache

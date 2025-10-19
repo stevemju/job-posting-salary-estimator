@@ -1,0 +1,26 @@
+[project]
+name = "job-posting-salary-estimator"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "pydantic (>=2.12.2,<3.0.0)",
+    "sentence-transformers (>=5.1.1,<6.0.0)",
+    "instructor (>=1.0.0)",     
+    "openai (>=1.0.0)",     
+    "pandas (>=2.3.3,<3.0.0)",     
+    "catboost (>=1.2.8,<2.0.0)",     
+    "optuna (>=4.5.0,<5.0.0)"  
+]
+
+[tool.poetry]
+packages = [{include = "job_posting_salary_estimator", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
