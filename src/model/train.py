@@ -9,7 +9,7 @@ from model.save import save_model
 from src.predictions.features import categorical_features, all_features, target_column
 
 best_params = {
-        'iterations': 1000,
+        'iterations': 2000,
         'depth': 7,
         'learning_rate': 0.04467250853587068,
         'l2_leaf_reg': 2.968200742527676,
