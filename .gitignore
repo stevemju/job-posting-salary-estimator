@@ -1,7 +1,5 @@
 /catboost_info
 data/datasets/
-data/embedding_cache/
-data/models/
 
 .venv/
 venv/
