@@ -14,7 +14,8 @@ dependencies = [
     "openai (>=1.0.0)",     
     "pandas (>=2.3.3,<3.0.0)",     
     "catboost (>=1.2.8,<2.0.0)",     
-    "optuna (>=4.5.0,<5.0.0)"  
+    "optuna (>=4.5.0,<5.0.0)",     
+    "streamlit (>=1.51.0,<2.0.0)"  
 ]
 
 [tool.poetry]
