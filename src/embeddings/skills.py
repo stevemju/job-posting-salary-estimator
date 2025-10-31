@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 
-from typing import List
+from typing import Dict, List
 from sentence_transformers import SentenceTransformer
 from feature_cleaning.utils import parse_stringified_list
 
@@ -11,20 +11,23 @@ mean_skill_emb_prefix = 'mean_skill_emb_'
 max_skill_emb_prefix = 'max_skill_emb_'
 
 
-def get_aggregated_skill_embeddings(
-        cleaned_skill_list: List,
-        cache_path: str = 'drive/MyDrive/linkedin-job-postings/skill_embedding_cache.pkl'
-    ):
-    """
-    Looks up embeddings once and computes both mean and max.
-    Returns a tuple: (mean_vector, max_vector).
-    """
+def load_skill_cache(cache_path: str = 'data/embedding_cache/skill_embedding_cache.pkl') -> Dict:
     if not os.path.exists(cache_path):
         raise FileNotFoundError(f"Embedding cache file not found at '{cache_path}'. Please run the training function first.")
 
     with open(cache_path, 'rb') as f:
         embedding_cache = pickle.load(f)
+    
+    return embedding_cache
 
+def get_aggregated_skill_embeddings(
+        cleaned_skill_list: List,
+        embedding_cache: Dict
+    ):
+    """
+    Looks up embeddings once and computes both mean and max.
+    Returns a tuple: (mean_vector, max_vector).
+    """
     embedding_dim = len(next(iter(embedding_cache.values())))
 
     if not isinstance(cleaned_skill_list, list):

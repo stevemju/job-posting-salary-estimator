@@ -5,8 +5,8 @@ from typing import Dict, List
 from catboost import CatBoostRegressor
 from openai import OpenAI
 
-from embeddings.job_function import compute_job_function_embedding
-from embeddings.skills import get_aggregated_skill_embeddings
+from embeddings.job_function import compute_job_function_embedding, load_job_function_embedding_cache
+from embeddings.skills import get_aggregated_skill_embeddings, load_skill_cache
 from feature_cleaning.education_level import clean_and_categorize_education
 from feature_cleaning.location import clean_and_standardize_location
 from feature_cleaning.skills import clean_skill_list
@@ -30,8 +30,8 @@ def compute_features(
         description: str,
         client: OpenAI,
         decoder_model_name: str,
-        job_function_cache_path: str = 'data/embedding_cache/job_function_embedding_cache.pkl',
-        skill_cache_path: str = 'data/embedding_cache/skill_embedding_cache.pkl',
+        job_function_cache: Dict,
+        skill_cache: Dict,
         ) -> Dict:
     if not is_ollama_server_running(client):
         raise Exception("LLM client is not running.")
@@ -48,8 +48,8 @@ def compute_features(
     cleaned_skills = clean_skill_list(job_details['technical_skills'] + job_details['soft_skills'] + job_details['domain_skills'])
 
     # embeddings
-    mean_skill_emb, max_skill_emb = get_aggregated_skill_embeddings(cleaned_skills, skill_cache_path)
-    job_function_embedding = compute_job_function_embedding(job_function, job_function_cache_path)
+    mean_skill_emb, max_skill_emb = get_aggregated_skill_embeddings(cleaned_skills, skill_cache)
+    job_function_embedding = compute_job_function_embedding(job_function, job_function_cache)
 
     # explode embeddings
     mean_skill_emb_exploded = {f"{mean_skill_emb_prefix}{k}": v for k, v in enumerate(mean_skill_emb)}
@@ -90,9 +90,11 @@ def predict_salary(
     client: OpenAI,
     decoder_model_name: str,
     all_features: List[str],
-    categorical_features: List[str]
+    categorical_features: List[str],
+    job_function_cache: Dict,
+    skill_cache: Dict
 ) -> float:
-    feature_dict = compute_features(title, company_name, location, description, client, decoder_model_name)
+    feature_dict = compute_features(title, company_name, location, description, client, decoder_model_name, job_function_cache, skill_cache)
     inference_df = pd.DataFrame([feature_dict])
 
     inference_df = inference_df.reindex(columns=all_features)
@@ -122,6 +124,9 @@ if __name__ == '__main__':
     print(f"Title: {title}")
     print(f"Location: {location}")
     print(f"Description: {description}")
+
+    job_function_cache = load_job_function_embedding_cache()
+    skill_cache = load_skill_cache()
     
     prediction = predict_salary(
         title, 
@@ -132,7 +137,9 @@ if __name__ == '__main__':
         get_client(), 
         decoder_model_name, 
         all_features, 
-        categorical_features
+        categorical_features,
+        job_function_cache,
+        skill_cache
         )
     
     print(f"Actual salary: ${int(salary)}")

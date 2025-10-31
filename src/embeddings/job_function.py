@@ -1,5 +1,6 @@
 import os
 import pickle
+from typing import Dict
 import numpy as np
 import pandas as pd
 
@@ -7,16 +8,20 @@ from sentence_transformers import SentenceTransformer
 
 job_function_emb_prefix = 'job_func_emb_'
 
-def compute_job_function_embedding(
-    job_function: str,
-    cache_path: str = 'drive/MyDrive/linkedin-job-postings/job_function_embedding_cache.pkl'
-) -> pd.DataFrame:
+def load_job_function_embedding_cache(cache_path: str = 'data/embedding_cache/job_function_embedding_cache.pkl') -> Dict:
     if not os.path.exists(cache_path):
         raise FileNotFoundError(f"Embedding cache file not found at '{cache_path}'. Please run the training function first.")
 
     with open(cache_path, 'rb') as f:
         embedding_cache = pickle.load(f)
 
+    return embedding_cache
+
+
+def compute_job_function_embedding(
+    job_function: str,
+    embedding_cache: Dict,
+) -> pd.DataFrame:
     # Get the embedding dimension from the first item in the cache
     embedding_dim = len(next(iter(embedding_cache.values())))
 
