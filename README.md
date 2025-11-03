@@ -4,6 +4,10 @@ This data science project predicts a realistic salary range for a job posting ba
 
 The application uses a ML model (CatBoost) for prediction and a local LLM (using Ollama) for real-time feature extraction from unstructured text. The entire project is packaged as an interactive web application using Streamlit and is designed for deployment on Hugging Face Spaces.
 
+
+**➡️ [View the Demo Here](https://huggingface.co/spaces/stevemju/job-salary-estimator) ⬅️**
+
+
 ## ✨ Features
 
 * **Salary Range Prediction:** Instead of a single prediction, it provides a realistic salary range by predicting the 35th and 65th percentiles.
