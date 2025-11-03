@@ -41,7 +41,6 @@ def compute_features(
     job_function = extract_job_function_from_title(title)
 
     _, job_details = get_job_details(description, 0, client, decoder_model_name)
-    print(job_details)
 
     categorized_education_level = clean_and_categorize_education(job_details['education_level'])
     experience_years_required = job_details['experience_years_required']

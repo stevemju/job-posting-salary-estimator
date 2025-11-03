@@ -17,7 +17,7 @@ sys.path.append('src')
 def load_artifacts():
     print("Loading models and artifacts.")
 
-    model = load_model("data/models/catboost_2025-10-19_17:27.cbm")
+    model = load_model("data/models/catboost_2025-10-31_18:03.cbm")
 
     # load embedding cache
     job_function_cache = load_job_function_embedding_cache()
