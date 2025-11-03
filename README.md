@@ -8,7 +8,7 @@ The application uses a ML model (CatBoost) for prediction and a local LLM (using
 **➡️ [View the Demo Here](https://huggingface.co/spaces/stevemju/job-salary-estimator) ⬅️**
 
 
-<img width="1497" height="779" alt="Capture d’écran 2025-11-03 à 21 27 28" src="https://github.com/user-attachments/assets/3bf6cbba-83ed-453c-aeb9-43b4569aec17" />
+<img width="1415" height="639" alt="Capture d’écran 2025-11-03 à 21 27 28" src="https://github.com/user-attachments/assets/8b8b4b2a-d277-4ae0-be27-c31b7a260ffb" />
 
 
 ## ✨ Features
