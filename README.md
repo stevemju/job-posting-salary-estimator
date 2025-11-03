@@ -8,6 +8,9 @@ The application uses a ML model (CatBoost) for prediction and a local LLM (using
 **➡️ [View the Demo Here](https://huggingface.co/spaces/stevemju/job-salary-estimator) ⬅️**
 
 
+<img width="1497" height="779" alt="Capture d’écran 2025-11-03 à 21 27 28" src="https://github.com/user-attachments/assets/3bf6cbba-83ed-453c-aeb9-43b4569aec17" />
+
+
 ## ✨ Features
 
 * **Salary Range Prediction:** Instead of a single prediction, it provides a realistic salary range by predicting the 35th and 65th percentiles.
