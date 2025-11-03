@@ -8,7 +8,15 @@ from model.eval import eval_model
 from model.save import save_model
 from src.predictions.features import categorical_features, all_features, target_column
 
-best_params = {
+lower_bound_best_params = {
+        'iterations': 2000,
+        'depth': 7,
+        'learning_rate': 0.04467250853587068,
+        'l2_leaf_reg': 2.968200742527676,
+        'bagging_temperature': 0.4146706543683366,
+    }
+
+upper_bound_best_params = {
         'iterations': 2000,
         'depth': 7,
         'learning_rate': 0.04467250853587068,
@@ -30,7 +38,7 @@ def train_model(
     model = CatBoostRegressor(
         **params,
         task_type= 'GPU' if gpu else 'CPU',
-        loss_function='RMSE',
+        loss_function='Quantile:alpha=0.25',
         eval_metric='RMSE',
         random_seed=seed,
         verbose=100,
@@ -76,8 +84,30 @@ if __name__ == '__main__':
     df = load_final_dataset(path, all_features, target_column, categorical_features)
     X_train, X_test, y_train, y_test = split_dataset(df, all_features, target_column)
 
-    model = train_model(X_train, X_test, y_train, y_test, categorical_features, best_params, gpu=False)
-    metrics = eval_model(model, X_test, y_test)
+    lower_bound_alpha = 0.25
+    upper_bound_alpha = 0.75
 
-    pp(metrics)
-    save_model(model)
+    # Train and export lower bound model
+    print("\nTraining lower model with best parameters...")
+    lower_model = CatBoostRegressor(
+        **lower_bound_best_params, 
+        loss_function=f'Quantile:alpha={lower_bound_alpha}',
+        task_type='CPU', 
+        cat_features=categorical_features)
+    lower_model.fit(X_train, y_train)
+    print(f"\n\nFinal metrics for model with alpha={lower_bound_alpha}:")
+    pp(eval_model(lower_model, X_test, y_test))
+    save_model(lower_model, name="lower_catboost")
+
+    # Train and export upper bound model
+    print("\nTraining  upper model with best parameters...")
+    upper_model = CatBoostRegressor(
+        **upper_bound_best_params, 
+        loss_function=f'Quantile:alpha={upper_bound_alpha}',
+        task_type='CPU', 
+        cat_features=categorical_features)
+    upper_model.fit(X_train, y_train)
+    print(f"\n\nFinal metrics for model with alpha={upper_bound_alpha}:")
+    pp(eval_model(upper_model, X_test, y_test))
+    save_model(upper_model, name="upper_catboost")
+    

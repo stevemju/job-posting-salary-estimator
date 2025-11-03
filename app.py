@@ -17,19 +17,20 @@ sys.path.append('src')
 def load_artifacts():
     print("Loading models and artifacts.")
 
-    model = load_model("data/models/catboost_2025-10-31_18:03.cbm")
+    lower_model = load_model("data/models/lower_catboost_2025-11-03_19:50.cbm")
+    upper_model = load_model("data/models/upper_catboost_2025-11-03_19:51.cbm")
 
     # load embedding cache
     job_function_cache = load_job_function_embedding_cache()
     skill_cache = load_skill_cache()
 
-    return model, job_function_cache, skill_cache
+    return lower_model, upper_model, job_function_cache, skill_cache
 
-model, job_function_cache, skill_cache = load_artifacts()
+lower_model, upper_model, job_function_cache, skill_cache = load_artifacts()
 
 st.set_page_config(layout="wide")
 st.title("💼 US Job Posting Salary Estimator")
-st.markdown("Enter the job details below to predict the salary.")
+st.markdown("Enter the job details below to predict a salary range.")
 
 # --- User Inputs ---
 with st.form(key="job_form"):
@@ -52,24 +53,43 @@ if submit_button:
     else:
         with st.spinner("Analyzing job posting... (This may take a moment as the LLM is running)"):
             try:
-                prediction = predict_salary(
+
+                client = get_client()
+
+                lower_salary = predict_salary(
                     title, 
                     company_name, 
                     location, 
                     description, 
-                    model, 
-                    get_client(), 
+                    lower_model, 
+                    client, 
                     decoder_model_name, 
                     all_features, 
                     categorical_features,
                     job_function_cache,
                     skill_cache
-                    )
+                )
+                
+                upper_salary = predict_salary(
+                    title, 
+                    company_name, 
+                    location, 
+                    description, 
+                    upper_model, 
+                    client, 
+                    decoder_model_name, 
+                    all_features, 
+                    categorical_features,
+                    job_function_cache,
+                    skill_cache
+                )
+
 
                 # --- Display Results ---
                 st.header("Predicted Salary Range")
-                formatted_pred = f"${int(np.round(prediction, -2)):,}"
-                st.metric(label="Estimated Salary", value=f"{formatted_pred}")
+                lower_formatted = f"${int(np.round(lower_salary, -2)):,}"
+                upper_formatted = f"${int(np.round(upper_salary, -2)):,}"
+                st.metric(label="Estimated Range", value=f"{lower_formatted} - {upper_formatted}")
                 
             except Exception as e:
                 st.error(f"An error occurred during prediction: {e}")
