@@ -1,11 +1,15 @@
 #!/bin/bash
 
-echo "--- This is the DEBUG run.sh script ---"
-echo "--- We are skipping the Ollama installation to test the Streamlit app ---"
+echo "--- This is DEBUG script v2 ---"
+echo "--- We are now testing the streamlit command directly ---"
 
-echo "Installing Python requirements..."
-pip install -r requirements.txt
+echo "Listing files in the current directory:"
+ls -l
 
-echo "Starting Streamlit app..."
+echo "Installing ONLY streamlit..."
+pip install streamlit
+
+echo "Attempting to start Streamlit app..."
 streamlit run app.py --server.port 7860 --server.address 0.0.0.0
-```
+
+echo "--- Script finished ---"
