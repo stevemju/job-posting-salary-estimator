@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# 1. Install and start the Ollama server
-echo "Installing Ollama..."
-curl -fsSL https://ollama.com/install.sh | sh
+echo "--- This is the DEBUG run.sh script ---"
+echo "--- We are skipping the Ollama installation to test the Streamlit app ---"
 
-echo "Starting Ollama server in the background..."
-ollama serve &
-sleep 5
+echo "Installing Python requirements..."
+pip install -r requirements.txt
 
-# 2. Pull the LLM model
-echo "Pulling the phi3:mini model..."
-ollama pull phi3:mini
-
-# 3. Launch the Streamlit app
 echo "Starting Streamlit app..."
 streamlit run app.py --server.port 7860 --server.address 0.0.0.0
+```
