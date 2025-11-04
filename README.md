@@ -1,3 +1,13 @@
+---
+title: Job Posting Salary Estimator
+emoji: 💼
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_file: app.py
+pinned: false
+---
+
 # 💼 Job Posting Salary Estimator
 
 This data science project predicts a realistic salary range for a job posting based on its title, description, company, and location.
