@@ -11,7 +11,7 @@ mean_skill_emb_prefix = 'mean_skill_emb_'
 max_skill_emb_prefix = 'max_skill_emb_'
 
 
-def load_skill_cache(cache_path: str = 'data/embedding_cache/skill_embedding_cache.pkl') -> Dict:
+def load_skill_cache(cache_path: str) -> Dict:
     if not os.path.exists(cache_path):
         raise FileNotFoundError(f"Embedding cache file not found at '{cache_path}'. Please run the training function first.")
 
@@ -20,7 +20,8 @@ def load_skill_cache(cache_path: str = 'data/embedding_cache/skill_embedding_cac
     
     return embedding_cache
 
-def get_aggregated_skill_embeddings(
+
+def compute_aggregated_skill_embeddings(
         cleaned_skill_list: List,
         embedding_cache: Dict
     ):
@@ -40,11 +41,11 @@ def get_aggregated_skill_embeddings(
     return (np.mean(embeddings, axis=0), np.max(embeddings, axis=0))
 
 
-def create_and_save_skills_embeddings(
+def create_skill_embedding_cache( 
     df_input: pd.DataFrame,
+    encoder_model_name: str,
+    output_cache_path: str,
     skill_column: str = 'cleaned_skills',
-    encoder_model_name: str = 'all-MiniLM-L6-v2',
-    output_cache_path: str = 'drive/MyDrive/linkedin-job-postings/skill_embedding_cache.pkl'
   ) -> pd.DataFrame:
     df = df_input.copy()
     df[skill_column] = df[skill_column].apply(parse_stringified_list)
@@ -54,7 +55,6 @@ def create_and_save_skills_embeddings(
 
     print(f"Found {len(all_skills)} unique skills to embed.")
     model = SentenceTransformer(encoder_model_name)
-    embedding_dim = model.get_sentence_embedding_dimension()
 
     unique_skill_embeddings = model.encode(all_skills, show_progress_bar=True)
     embedding_cache = {skill: emb for skill, emb in zip(all_skills, unique_skill_embeddings)}
@@ -63,6 +63,18 @@ def create_and_save_skills_embeddings(
     with open(output_cache_path, 'wb') as f:
         pickle.dump(embedding_cache, f)
     print(f"Embedding cache saved to '{output_cache_path}'")
+
+
+def compute_skills_embeddings_df(
+    df_input: pd.DataFrame,
+    skill_column: str,
+    encoder_model_name: str 
+  ) -> pd.DataFrame:
+    df = df_input.copy()
+    
+    embedding_cache = load_skill_cache()
+    model = SentenceTransformer(encoder_model_name)
+    embedding_dim = model.get_sentence_embedding_dimension()
 
     def get_aggregated_vectors(skill_list: List):
         if not isinstance(skill_list, list):

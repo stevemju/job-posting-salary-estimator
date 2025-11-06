@@ -1,0 +1,7 @@
+models:
+  encoder_model_name: 'all-MiniLM-L6-v2'
+  decoder_model_name: 'phi3:mini'
+
+embedding_paths:
+  skill_cache: data/embedding_cache/skill_embedding_cache.pkl
+  job_function_cache: data/embedding_cache/job_function_embedding_cache.pkl

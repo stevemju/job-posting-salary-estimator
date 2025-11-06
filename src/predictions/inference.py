@@ -5,8 +5,8 @@ from typing import Dict, List
 from catboost import CatBoostRegressor
 from openai import OpenAI
 
-from embeddings.job_function import compute_job_function_embedding, load_job_function_embedding_cache
-from embeddings.skills import get_aggregated_skill_embeddings, load_skill_cache
+from embeddings.job_function import compute_job_function_embedding
+from embeddings.skills import compute_aggregated_skill_embeddings
 from feature_cleaning.education_level import clean_and_categorize_education
 from feature_cleaning.location import clean_and_standardize_location
 from feature_cleaning.skills import clean_skill_list
@@ -15,11 +15,8 @@ from feature_extraction.seniority import extract_seniority_from_title
 from llm.job_details import get_job_details
 from embeddings.skills import mean_skill_emb_prefix, max_skill_emb_prefix
 from embeddings.job_function import job_function_emb_prefix
-from model.save import load_model
-from llm.ollama_setup import get_client, is_ollama_server_running
-from model.train import load_initial_dataset
-from src.predictions.features import categorical_features, all_features
-from src.llm.model import decoder_model_name
+from llm.ollama_setup import is_ollama_server_running
+from src.predictions.features import all_features
 
 
 
@@ -47,7 +44,7 @@ def compute_features(
     cleaned_skills = clean_skill_list(job_details['technical_skills'] + job_details['soft_skills'] + job_details['domain_skills'])
 
     # embeddings
-    mean_skill_emb, max_skill_emb = get_aggregated_skill_embeddings(cleaned_skills, skill_cache)
+    mean_skill_emb, max_skill_emb = compute_aggregated_skill_embeddings(cleaned_skills, skill_cache)
     job_function_embedding = compute_job_function_embedding(job_function, job_function_cache)
 
     # explode embeddings

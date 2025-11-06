@@ -1,0 +1,63 @@
+schema: '2.0'
+stages:
+  build_job_function_embedding_cache:
+    cmd: poetry run python src/embeddings/build_job_function.py 
+      --job-function-cache-output 
+      data/embedding_cache/job_function_embedding_cache.pkl
+    deps:
+    - path: data/datasets/postings_final.csv
+      hash: md5
+      md5: 9bd34cdccf00ee4455528b961c9c03ca
+      size: 854146356
+    - path: src/embeddings/build_job_function.py
+      hash: md5
+      md5: d74b1fcfa8326c174fc32c5aa8b9ab98
+      size: 693
+    - path: src/embeddings/job_function.py
+      hash: md5
+      md5: 788aca70fa4ef7ac8506bd11ced5e4ce
+      size: 2850
+    - path: src/embeddings/utils.py
+      hash: md5
+      md5: a8fa9e73bf001bc6223c4891eabacefd
+      size: 200
+    params:
+      params.yaml:
+        embedding_paths.job_function_cache: 
+          data/embedding_cache/job_function_embedding_cache.pkl
+        models.encoder_model_name: all-MiniLM-L6-v2
+    outs:
+    - path: data/embedding_cache/job_function_embedding_cache.pkl
+      hash: md5
+      md5: 758a6c57e7fddc3ea9865d41a0d3f16f
+      size: 81104
+  build_skill_embedding_cache:
+    cmd: poetry run python src/embeddings/build_skill.py --skill-cache-output 
+      data/embedding_cache/skill_embedding_cache.pkl
+    deps:
+    - path: data/datasets/postings_final.csv
+      hash: md5
+      md5: 9bd34cdccf00ee4455528b961c9c03ca
+      size: 854146356
+    - path: src/embeddings/build_skill.py
+      hash: md5
+      md5: c2f3c6998d4940160fd927c23ea17ec4
+      size: 668
+    - path: src/embeddings/skills.py
+      hash: md5
+      md5: c5343bb94530a242237f58028616702b
+      size: 3481
+    - path: src/embeddings/utils.py
+      hash: md5
+      md5: a8fa9e73bf001bc6223c4891eabacefd
+      size: 200
+    params:
+      params.yaml:
+        embedding_paths.skill_cache: 
+          data/embedding_cache/skill_embedding_cache.pkl
+        models.encoder_model_name: all-MiniLM-L6-v2
+    outs:
+    - path: data/embedding_cache/skill_embedding_cache.pkl
+      hash: md5
+      md5: e962aa5cb2e9165d65fc4b9851761dd7
+      size: 179276659
