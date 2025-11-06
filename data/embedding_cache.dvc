@@ -1,0 +1,6 @@
+outs:
+- md5: 352ed51bb821aa2e873b6fedd4e94c7b.dir
+  size: 179357763
+  nfiles: 2
+  hash: md5
+  path: embedding_cache
