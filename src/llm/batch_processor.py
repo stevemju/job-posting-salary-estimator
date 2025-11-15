@@ -16,7 +16,7 @@ def process_in_batches(
     batch_size: int = 200,
     max_workers: int = 16
 ):
-    if not is_ollama_server_running():
+    if not is_ollama_server_running(client):
         return None
 
     print(f"Starting job. Results will be saved to '{output_filepath}'.")

@@ -61,3 +61,36 @@ stages:
       hash: md5
       md5: e962aa5cb2e9165d65fc4b9851761dd7
       size: 179276659
+  process_data:
+    cmd: poetry run python src/dataset/process_data.py --checkpoint-file-path 
+      data/checkpoints/postings_checkpoint.parquet --output-path 
+      data/datasets/postings_processed.csv
+    deps:
+    - path: data/datasets/postings_cleaned.csv
+      hash: md5
+      md5: 7c6c030bd251a2b1843349d0bc2428a1
+      size: 143901813
+    - path: src/llm/batch_processor.py
+      hash: md5
+      md5: 4c029552f260d385f8b42a6a2cda5c9f
+      size: 2744
+    - path: src/llm/job_details.py
+      hash: md5
+      md5: b294632b1c4fabb31bc43a2653733652
+      size: 5049
+    - path: src/llm/ollama_setup.py
+      hash: md5
+      md5: 37c2159c2ef85bde82c3f3303cc9d30b
+      size: 646
+    params:
+      params.yaml:
+        llm_processing.batch_size: 5
+        llm_processing.checkpoint_file_path: 
+          data/checkpoints/postings_checkpoint.parquet
+        llm_processing.max_workers: 16
+        llm_processing.output_path: data/datasets/postings_processed.csv
+    outs:
+    - path: data/datasets/postings_processed.csv
+      hash: md5
+      md5: 045a580abe127b01f0fb8299b8821acc
+      size: 3974

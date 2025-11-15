@@ -1,4 +1,22 @@
 stages:
+  process_data:
+    cmd: >-
+      poetry run python src/dataset/process_data.py
+      --checkpoint-file-path ${llm_processing.checkpoint_file_path}
+      --output-path ${llm_processing.output_path}
+    deps:
+      - data/datasets/postings_cleaned.csv
+      - src/llm/ollama_setup.py
+      - src/llm/batch_processor.py
+      - src/llm/job_details.py
+    params:
+      - llm_processing.output_path
+      - llm_processing.checkpoint_file_path
+      - llm_processing.batch_size
+      - llm_processing.max_workers
+    outs:
+      - ${llm_processing.output_path}
+
   build_job_function_embedding_cache:
     cmd: >-
       poetry run python src/embeddings/build_job_function.py

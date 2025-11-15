@@ -5,3 +5,9 @@ models:
 embedding_paths:
   skill_cache: data/embedding_cache/skill_embedding_cache.pkl
   job_function_cache: data/embedding_cache/job_function_embedding_cache.pkl
+
+llm_processing:
+  output_path: data/datasets/postings_processed.csv
+  checkpoint_file_path: data/checkpoints/postings_checkpoint.parquet
+  batch_size: 5
+  max_workers: 16
