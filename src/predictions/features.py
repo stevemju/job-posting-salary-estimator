@@ -1,7 +1,11 @@
+import yaml
+
 from embeddings.utils import get_embedding_dimension
 from embeddings.skills import mean_skill_emb_prefix, max_skill_emb_prefix
 from embeddings.job_function import job_function_emb_prefix
-from llm.model import encoder_model_name
+
+with open('params.yaml', 'r') as f:
+    params = yaml.safe_load(f)
 
 
 categorical_features = [
@@ -20,9 +24,9 @@ categorical_features = [
 
 numerical_features = ['experience_years_required']
 
-mean_skill_embedding_features = [f"{mean_skill_emb_prefix}{i}" for i in range(get_embedding_dimension(encoder_model_name))]
-max_skill_embedding_features = [f"{max_skill_emb_prefix}{i}" for i in range(get_embedding_dimension(encoder_model_name))]
-job_function_embedding_features = [f"{job_function_emb_prefix}{i}" for i in range(get_embedding_dimension(encoder_model_name))]
+mean_skill_embedding_features = [f"{mean_skill_emb_prefix}{i}" for i in range(get_embedding_dimension(params['models']['encoder_model_name']))]
+max_skill_embedding_features = [f"{max_skill_emb_prefix}{i}" for i in range(get_embedding_dimension(params['models']['encoder_model_name']))]
+job_function_embedding_features = [f"{job_function_emb_prefix}{i}" for i in range(get_embedding_dimension(params['models']['encoder_model_name']))]
 
 all_features = sorted(categorical_features + numerical_features + mean_skill_embedding_features + max_skill_embedding_features + job_function_embedding_features)
 

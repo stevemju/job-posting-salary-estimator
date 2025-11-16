@@ -2,9 +2,11 @@ import os
 import pickle
 import numpy as np
 import pandas as pd
+import yaml
 
 from typing import Dict, List
 from sentence_transformers import SentenceTransformer
+
 from feature_cleaning.utils import parse_stringified_list
 
 mean_skill_emb_prefix = 'mean_skill_emb_'
@@ -71,8 +73,11 @@ def compute_skills_embeddings_df(
     encoder_model_name: str 
   ) -> pd.DataFrame:
     df = df_input.copy()
+
+    with open('params.yaml', 'r') as f:
+        params = yaml.safe_load(f)
     
-    embedding_cache = load_skill_cache()
+    embedding_cache = load_skill_cache(params['embedding_paths']['skill_cache'])
     model = SentenceTransformer(encoder_model_name)
     embedding_dim = model.get_sentence_embedding_dimension()
 

@@ -6,7 +6,7 @@ from catboost import CatBoostRegressor
 from sklearn.model_selection import train_test_split
 from model.eval import eval_model
 from model.save import save_model
-from src.predictions.features import categorical_features, all_features, target_column
+from predictions.features import categorical_features, all_features, target_column
 
 lower_bound_best_params = {
         'iterations': 2000,

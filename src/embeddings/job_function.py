@@ -6,6 +6,7 @@ import pandas as pd
 from typing import Dict
 
 from sentence_transformers import SentenceTransformer
+import yaml
 
 job_function_emb_prefix = 'job_func_emb_'
 
@@ -70,9 +71,12 @@ def compute_job_function_embedding_df(
     encoder_model_name: str
 ) -> pd.DataFrame:
     df = df_input.copy()
+
+    with open('params.yaml', 'r') as f:
+        params = yaml.safe_load(f)
     
     model = SentenceTransformer(encoder_model_name)
-    embedding_cache = load_job_function_embedding_cache()
+    embedding_cache = load_job_function_embedding_cache(params['embedding_paths']['job_function_cache'])
 
     print("Applying embeddings to the DataFrame...")
     embedding_series = df[function_column].progress_apply(lambda func: embedding_cache.get(func, np.zeros(model.get_sentence_embedding_dimension())))

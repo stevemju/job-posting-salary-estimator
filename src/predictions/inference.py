@@ -16,7 +16,7 @@ from llm.job_details import get_job_details
 from embeddings.skills import mean_skill_emb_prefix, max_skill_emb_prefix
 from embeddings.job_function import job_function_emb_prefix
 from llm.ollama_setup import is_ollama_server_running
-from src.predictions.features import all_features
+from predictions.features import all_features
 
 
 

@@ -1,14 +1,14 @@
 import streamlit as st
 import numpy as np
 import sys
+import yaml
 
 from embeddings.job_function import load_job_function_embedding_cache
 from embeddings.skills import load_skill_cache
 from llm.ollama_setup import get_client
 from model.save import load_model
 from predictions.inference import predict_salary
-from src.predictions.features import categorical_features, all_features
-from src.llm.model import decoder_model_name
+from predictions.features import categorical_features, all_features
 
 
 sys.path.append('src')
@@ -17,16 +17,19 @@ sys.path.append('src')
 def load_artifacts():
     print("Loading models and artifacts.")
 
+    with open('params.yaml', 'r') as f:
+        params = yaml.safe_load(f)
+
     lower_model = load_model("data/models/lower_catboost_2025-11-03_21:04.cbm")
     upper_model = load_model("data/models/upper_catboost_2025-11-03_21:36.cbm")
 
     # load embedding cache
-    job_function_cache = load_job_function_embedding_cache()
-    skill_cache = load_skill_cache()
+    job_function_cache = load_job_function_embedding_cache(params['embedding_paths']['job_function_cache'])
+    skill_cache = load_skill_cache(params['embedding_paths']['skill_cache'])
 
-    return lower_model, upper_model, job_function_cache, skill_cache
+    return lower_model, upper_model, job_function_cache, skill_cache, params['models']['decoder_model_name']
 
-lower_model, upper_model, job_function_cache, skill_cache = load_artifacts()
+lower_model, upper_model, job_function_cache, skill_cache, decoder_model_name = load_artifacts()
 
 st.set_page_config(layout="wide")
 st.title("💼 US Job Posting Salary Estimator")
@@ -83,7 +86,6 @@ if submit_button:
                     job_function_cache,
                     skill_cache
                 )
-
 
                 # --- Display Results ---
                 st.header("Predicted Salary Range")

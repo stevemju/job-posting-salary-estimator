@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from model.eval import eval_model
 from model.save import save_model
 from model.train import load_final_dataset, split_dataset
-from src.predictions.features import categorical_features, all_features, target_column
+from predictions.features import categorical_features, all_features, target_column
 
 
 
