@@ -6,7 +6,7 @@ from embeddings.job_function import create_function_embedding_cache
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('data/datasets/postings_final.csv', usecols=['job_function'])
+    df = pd.read_csv('data/datasets/postings_processed.csv', usecols=['job_function'])
 
     with open('params.yaml', 'r') as f:
         params = yaml.safe_load(f)

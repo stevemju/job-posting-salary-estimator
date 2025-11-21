@@ -6,7 +6,7 @@ from embeddings.skills import create_skill_embedding_cache
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('data/datasets/postings_final.csv', usecols=['cleaned_skills'])
+    df = pd.read_csv('data/datasets/postings_processed.csv', usecols=['cleaned_skills'])
 
     with open('params.yaml', 'r') as f:
         params = yaml.safe_load(f)

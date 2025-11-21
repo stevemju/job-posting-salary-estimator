@@ -5,6 +5,7 @@ import pandas as pd
 import yaml
 
 from typing import Dict, List
+from tqdm import tqdm
 from sentence_transformers import SentenceTransformer
 
 from feature_cleaning.utils import parse_stringified_list
@@ -70,15 +71,13 @@ def create_skill_embedding_cache(
 def compute_skills_embeddings_df(
     df_input: pd.DataFrame,
     skill_column: str,
-    encoder_model_name: str 
+    model: SentenceTransformer,
+    embedding_cache
   ) -> pd.DataFrame:
     df = df_input.copy()
-
-    with open('params.yaml', 'r') as f:
-        params = yaml.safe_load(f)
     
-    embedding_cache = load_skill_cache(params['embedding_paths']['skill_cache'])
-    model = SentenceTransformer(encoder_model_name)
+    tqdm.pandas()
+
     embedding_dim = model.get_sentence_embedding_dimension()
 
     def get_aggregated_vectors(skill_list: List):

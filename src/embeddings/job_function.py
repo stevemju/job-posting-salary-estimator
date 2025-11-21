@@ -2,11 +2,11 @@ import os
 import pickle
 import numpy as np
 import pandas as pd
+import yaml
 
 from typing import Dict
-
 from sentence_transformers import SentenceTransformer
-import yaml
+from tqdm import tqdm
 
 job_function_emb_prefix = 'job_func_emb_'
 
@@ -68,16 +68,13 @@ def create_function_embedding_cache(
 def compute_job_function_embedding_df(
     df_input: pd.DataFrame,
     function_column: str,
-    encoder_model_name: str
+    model: SentenceTransformer,
+    embedding_cache
 ) -> pd.DataFrame:
     df = df_input.copy()
 
-    with open('params.yaml', 'r') as f:
-        params = yaml.safe_load(f)
+    tqdm.pandas()
     
-    model = SentenceTransformer(encoder_model_name)
-    embedding_cache = load_job_function_embedding_cache(params['embedding_paths']['job_function_cache'])
-
     print("Applying embeddings to the DataFrame...")
     embedding_series = df[function_column].progress_apply(lambda func: embedding_cache.get(func, np.zeros(model.get_sentence_embedding_dimension())))
 
