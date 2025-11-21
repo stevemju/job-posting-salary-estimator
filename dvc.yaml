@@ -19,11 +19,11 @@ stages:
 
   build_job_function_embedding_cache:
     cmd: >-
-      poetry run python src/embeddings/build_job_function.py
+      poetry run python src/embeddings/build_job_function_cache.py
       --job-function-cache-output ${embedding_paths.job_function_cache}
     deps:
-      - data/datasets/postings_final.csv
-      - src/embeddings/build_job_function.py
+      - data/datasets/postings_processed.csv
+      - src/embeddings/build_job_function_cache.py
       - src/embeddings/job_function.py
       - src/embeddings/utils.py
     params:
@@ -34,11 +34,11 @@ stages:
 
   build_skill_embedding_cache:
     cmd:  >-
-      poetry run python src/embeddings/build_skill.py
+      poetry run python src/embeddings/build_skill_cache.py
       --skill-cache-output ${embedding_paths.skill_cache}
     deps:
-      - data/datasets/postings_final.csv
-      - src/embeddings/build_skill.py
+      - data/datasets/postings_processed.csv
+      - src/embeddings/build_skill_cache.py
       - src/embeddings/skills.py
       - src/embeddings/utils.py
     params:
@@ -46,3 +46,26 @@ stages:
       - embedding_paths.skill_cache
     outs:
       - ${embedding_paths.skill_cache}
+
+  build_model_features:
+    cmd: >-
+      poetry run python src/feature_extraction/build_features.py
+      --output-path ${build_features.output_path}
+    deps:
+      - src/feature_extraction/build_features.py
+      - src/embeddings/job_function.py
+      - src/embeddings/skills.py
+      - src/feature_extraction/job_function.py
+      - src/feature_extraction/seniority.py
+      - src/feature_cleaning/education_level.py
+      - src/feature_cleaning/location.py
+      - data/datasets/postings_processed.csv
+      - data/embedding_cache/job_function_embedding_cache.pkl
+      - data/embedding_cache/skill_embedding_cache.pkl
+    params: 
+      - models.encoder_model_name
+      - embedding_paths.skill_cache
+      - embedding_paths.job_function_cache
+      - build_features.output_path
+    outs:
+      - ${build_features.output_path}

@@ -2,6 +2,8 @@ import argparse
 import pandas as pd
 import yaml
 
+from feature_extraction.job_function import extract_job_function_from_title
+from feature_extraction.seniority import extract_seniority_from_title
 from llm.batch_processor import process_in_batches
 from llm.ollama_setup import get_client, is_ollama_server_running
 
@@ -21,7 +23,7 @@ if __name__ == '__main__':
     is_ollama_server_running(client)
 
     processed = process_in_batches(
-        df=df, 
+        df=df,
         output_filepath=args.checkpoint_file_path,
         client=client,
         decoder_model_name=params['models']['decoder_model_name'],
@@ -29,6 +31,14 @@ if __name__ == '__main__':
         max_workers=params['llm_processing']['max_workers']
         )
     
+    # cleaning and operations on basic features
+    processed['company_name'] = processed['company_name'].fillna('unknown')
+    processed['job_function'] = processed.title.apply(extract_job_function_from_title)
+    processed['seniority'] = processed.title.apply(extract_seniority_from_title)
+    
+    # remove internships
+    processed = processed[(processed.seniority != 'intern')]
+
     print(processed.info())
-    processed.to_csv('data/datasets/postings_processed.csv', index=True)
+    processed.to_csv(args.output_path, index=True)
     

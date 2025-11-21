@@ -39,7 +39,7 @@ def process_in_batches(
 
     if df_to_process.empty:
         print("All rows have already been processed. Nothing to do.")
-        return processed_df
+        return df.join(processed_df)
 
     print(f"Starting processing for {len(df_to_process)} remaining rows...")
 

@@ -11,3 +11,6 @@ llm_processing:
   checkpoint_file_path: data/checkpoints/postings_checkpoint.parquet
   batch_size: 5
   max_workers: 16
+
+build_features:
+  output_path:  data/datasets/postings_final_test.csv
