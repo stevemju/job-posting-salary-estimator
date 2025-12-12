@@ -12,7 +12,7 @@ pinned: false
 
 This data science project predicts a realistic salary range for a job posting based on its title, description, company, and location.
 
-The application uses a ML model (CatBoost) for prediction and a local LLM (using Ollama) for real-time feature extraction from unstructured text. The entire project is packaged as an interactive web application using Streamlit and is designed for deployment on Hugging Face Spaces.
+The application uses a ML model (CatBoost) for prediction and a local LLM (using Ollama) for real-time feature extraction from unstructured text. The project is packaged as an interactive web application using Streamlit, managed with Poetry and DVC, and deployed on Hugging Face Spaces.
 
 
 **➡️ [View the Demo Here](https://huggingface.co/spaces/stevemju/job-salary-estimator) ⬅️**
@@ -20,6 +20,31 @@ The application uses a ML model (CatBoost) for prediction and a local LLM (using
 
 <img width="1415" height="639" alt="Capture d’écran 2025-11-03 à 21 27 28" src="https://github.com/user-attachments/assets/8b8b4b2a-d277-4ae0-be27-c31b7a260ffb" />
 
+
+## 🛠️ Tech Stack
+
+* **Package Management:** `Poetry`
+
+* **Version Control:** `Git` & `Git LFS`
+
+* **Core Stack:** `Python`, `Pandas`, `NumPy`
+
+* **Data Ops:** `DVC` (Data Version Control) for pipeline and artifact management.
+
+* **Machine Learning:** `CatBoost` (using Quantile Regression to estimate percentiles), `scikit-learn`
+
+* **Hyperparameter Tuning:** `Optuna`
+
+* **LLM (Local):** `Ollama` (running `phi3:mini` for inference but `llama3:8b` for feature extraction during training)
+
+* **LLM Interfacing:** `instructor`, `pydantic`
+
+* **Embeddings:** `sentence-transformers` (`all-MiniLM-L6-v2`)
+
+* **Web App:** `Streamlit`
+
+* **Deployment:** `Hugging Face Spaces` (using a Docker setup)
+  
 
 ## ✨ Features
 
@@ -47,27 +72,7 @@ The application uses a ML model (CatBoost) for prediction and a local LLM (using
 
 * **Interactive UI:** A simple web interface built with Streamlit to make the model demoable.
 
-## 🛠️ Tech Stack
-
-* **Package Management:** `Poetry`
-
-* **Version Control:** `Git` & `Git LFS`
-
-* **Core Stack:** `Python`, `Pandas`, `NumPy`
-
-* **Machine Learning:** `CatBoost` (using Quantile Regression), `scikit-learn`
-
-* **Hyperparameter Tuning:** `Optuna`
-
-* **LLM (Local):** `Ollama` (running `phi3:mini` for inference but `llama3:8b` for feature extraction during training)
-
-* **LLM Interfacing:** `instructor`, `pydantic`
-
-* **Embeddings:** `sentence-transformers` (`all-MiniLM-L6-v2`)
-
-* **Web App:** `Streamlit`
-
-* **Deployment:** `Hugging Face Spaces` (using a Docker setup)
+* **Reproducible Pipeline:** Fully automated data processing and training pipeline managed by DVC.
 
 
 ## 🚀 How It Works
@@ -85,54 +90,6 @@ The project uses a two-model (quantile regression) approach to generate its pred
    * **Upper Bound Model:** A separate CatBoost model trained with a `Quantile:alpha=0.65` loss function predicts the 65th percentile.
 
 4. **Display:** The two resulting predictions are presented to the user as a realistic salary range.
-
-## 💻 How to Run Locally
-
-### 1. Prerequisites
-
-* [Python 3.10+](https://www.python.org/)
-
-* [Poetry](https://python-poetry.org/) for package management
-
-* [Git](https://git-scm.com/) and [Git LFS](https://git-lfs.github.com/)
-
-* [Ollama Desktop App](https://ollama.com/) (for macOS or Windows)
-
-### 2. Clone the Repository
-
-```git clone https://github.com/stevemju/job-posting-salary-estimator.git cd job-posting-salary-estimator```
-
-### 3. Install Dependencies
-
-This will create a virtual environment and install all necessary Python packages.
-
-```poetry install```
-
-### 4. Download LLM and LFS Files
-
-You need to pull the LLM model for Ollama and the ML models from Git LFS.
-
-* Pull the LLM model
-  
-```ollama pull phi3:mini ```
-
-* Pull the ML models and artifacts
-
-```git lfs pull```
-
-### 5. Run the Streamlit App
-
-Make sure your Ollama desktop application is running in the background.
-
-Activate the virtual environment
-
-```poetry shell```
-
-Run the app
-
-```streamlit run app.py```
-
-Your app will open in your browser at http://localhost:8501.
 
 ## 🚢 Deployment
 
