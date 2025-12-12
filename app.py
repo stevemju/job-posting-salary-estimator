@@ -5,6 +5,13 @@ import yaml
 import os
 
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(current_dir, 'src')
+sys.path.append(src_path)
+
+# Print for debugging (optional, can be removed later)
+print(f"Added to sys.path: {src_path}")
+
 
 print("--- DEBUGGING DEPLOYMENT ---")
 print(f"Current Working Directory: {os.getcwd()}")
