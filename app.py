@@ -4,12 +4,6 @@ import sys
 import yaml
 import os
 
-from embeddings.job_function import load_job_function_embedding_cache
-from embeddings.skills import load_skill_cache
-from llm.ollama_setup import get_client
-from model.save import load_model
-from predictions.inference import predict_salary
-from predictions.features import categorical_features, all_features
 
 
 print("--- DEBUGGING DEPLOYMENT ---")
@@ -44,6 +38,14 @@ for root, dirs, files in os.walk("."):
         print("------------------------------\n")
 
 print("--- END DEBUGGING ---")
+
+from embeddings.job_function import load_job_function_embedding_cache
+from embeddings.skills import load_skill_cache
+from llm.ollama_setup import get_client
+from model.save import load_model
+from predictions.inference import predict_salary
+from predictions.features import categorical_features, all_features
+
 
 @st.cache_resource
 def load_artifacts():
