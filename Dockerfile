@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 ENV LAST_UPDATED="2023-12-12-15301" 
+ENV PYTHONUNBUFFERED=1
 
 COPY . .
 
