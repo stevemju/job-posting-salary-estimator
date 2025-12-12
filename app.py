@@ -12,6 +12,39 @@ from predictions.inference import predict_salary
 from predictions.features import categorical_features, all_features
 
 
+print("--- DEBUGGING DEPLOYMENT ---")
+print(f"Current Working Directory: {os.getcwd()}")
+
+# 1. Print Directory Structure (to find the 'Ghost' folder)
+print("\nfile structure:")
+for root, dirs, files in os.walk("."):
+    for name in files:
+        if name.endswith(".py"):
+            print(os.path.join(root, name))
+
+# 2. Print System Path
+print(f"\nsys.path: {sys.path}")
+
+# 3. Read the actual content of inference.py on the server
+# We'll search for the file to handle the weird path from your traceback
+target_file = "inference.py"
+print(f"\nSearching for content of {target_file}...")
+for root, dirs, files in os.walk("."):
+    if target_file in files:
+        full_path = os.path.join(root, target_file)
+        print(f"\n--- CONTENT OF {full_path} ---")
+        try:
+            with open(full_path, 'r') as f:
+                # Print the first 25 lines (where imports usually are)
+                for i, line in enumerate(f):
+                    if i > 25: break
+                    print(f"{i+1}: {line.strip()}")
+        except Exception as e:
+            print(f"Could not read file: {e}")
+        print("------------------------------\n")
+
+print("--- END DEBUGGING ---")
+
 @st.cache_resource
 def load_artifacts():
     print("Loading models and artifacts.")
