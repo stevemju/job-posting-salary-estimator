@@ -12,8 +12,6 @@ from predictions.inference import predict_salary
 from predictions.features import categorical_features, all_features
 
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
-
 @st.cache_resource
 def load_artifacts():
     print("Loading models and artifacts.")
