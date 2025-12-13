@@ -9,8 +9,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 src_path = os.path.join(current_dir, 'src')
 sys.path.append(src_path)
 
-# Print for debugging (optional, can be removed later)
-print(f"Added to sys.path: {src_path}")
+sys.path = [p for p in sys.path if "job-posting-salary-estimator/src" not in p]
 
 
 print("--- DEBUGGING DEPLOYMENT ---")
