@@ -7,10 +7,12 @@ import os
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_path = os.path.join(current_dir, 'src')
-sys.path.append(src_path)
+if src_path not in sys.path:
+    sys.path.append(src_path)
 
 sys.path = [p for p in sys.path if "job-posting-salary-estimator/src" not in p]
 
+print(f"Sanitized sys.path: {sys.path}")
 
 print("--- DEBUGGING DEPLOYMENT ---")
 print(f"Current Working Directory: {os.getcwd()}")
