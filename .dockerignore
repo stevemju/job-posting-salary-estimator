@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+
+.venv
+venv
+
+pycache
+*.pyc
+.DS_Store
+
+src/job-posting-salary-estimator/
+src/src/
